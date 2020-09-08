@@ -128,15 +128,24 @@ public class MatchThree : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 8f))
             {
-                Debug.Log(hit.transform.name + "\n" + hit.transform.position);
-                xSel = (int)hit.transform.position.x; zSel = (int)hit.transform.position.z;
-                //go_selected = go_grid[xSel, zSel];
-               // in_selected = in_grid[xSel, zSel];
-                //Debug.Log(go_selected + "\n" + xSel + " " + zSel);                
-                if (markerShowing) SwapCubes();
-                Debug.Log("markerShowing is " + markerShowing);
-                if(!swapping)ShowMarkers();
-                Debug.Log("markerShowing is " + markerShowing);
+                if (hit.transform.tag == "blue" || hit.transform.tag == "green" || hit.transform.tag == "orange" || hit.transform.tag == "red")
+                {
+                    Debug.Log(hit.transform.name + "\n" + hit.transform.position);
+                    xSel = (int)hit.transform.position.x; zSel = (int)hit.transform.position.z;
+                    //go_selected = go_grid[xSel, zSel];
+                    // in_selected = in_grid[xSel, zSel];
+                    //Debug.Log(go_selected + "\n" + xSel + " " + zSel);                
+                    if (markerShowing) SwapCubes();
+                    Debug.Log("markerShowing is " + markerShowing);
+                    if (!swapping) ShowMarkers();
+                    Debug.Log("markerShowing is " + markerShowing);
+                }
+                else if (markerShowing) 
+                {
+                    xSel = (int)hit.transform.position.x; zSel = (int)hit.transform.position.z;
+                    SwapCubes();
+                    if (!swapping) ShowMarkers();
+                }
             }
         }
     }
@@ -186,11 +195,18 @@ public class MatchThree : MonoBehaviour
         {
             GameObject go_oldPos = go_grid[xPrev, zPrev]; ;
             GameObject go_newPos = go_grid[xSel, zSel];
+
+            Debug.Log(go_oldPos.name);
+            //Debug.Log(go_newPos.name);
+
             int in_oldPos = in_grid[xPrev, zPrev];
             int in_newPos = in_grid[xSel, zSel];
 
-            Vector3 v3_old = go_grid[xPrev, zPrev].transform.position;
-            Vector3 v3_new = go_grid[xSel, zSel].transform.position;
+            //Vector3 v3_old = go_oldPos.transform.position != null ? go_oldPos.transform.position : new Vector3(xPrev, 0, zPrev);
+            Vector3 v3_old = new Vector3(xPrev, 0, zPrev);
+            //Vector3 v3_new = go_newPos.transform.position != null ? go_newPos.transform.position : new Vector3(xSel, 0, zSel);
+            Vector3 v3_new = new Vector3(xSel, 0, zSel);
+
 
             //Destroy(go_grid[xPrev, zPrev]);
             //Destroy(go_grid[xSel, zSel]);
@@ -199,8 +215,8 @@ public class MatchThree : MonoBehaviour
             //go_grid[xSel, zSel] = (GameObject)Instantiate(go_oldPos);//, new Vector3((float)xPrev, 0.1f, (float)zPrev), transform.rotation);
             //go_grid[xPrev, zPrev] = (GameObject)Instantiate(go_newPos);//, new Vector3((float)xSel, 0.1f, (float)zSel), transform.rotation);
 
-            go_grid[xSel, zSel].transform.position = v3_old; //new to old
-            go_grid[xPrev, zPrev].transform.position = v3_new; //old to new
+            if(go_grid[xSel, zSel] != null) go_grid[xSel, zSel].transform.position = v3_old; //new to old
+            if(go_grid[xPrev, zPrev] != null) go_grid[xPrev, zPrev].transform.position = v3_new; //old to new
 
             go_grid[xSel, zSel] = go_oldPos;
             go_grid[xPrev, zPrev] = go_newPos;
