@@ -66,3 +66,4 @@ def rename():
 rename()
 run_cmd(f"del *{old_img_type}")
 print("end")
+run_cmd("pause")
