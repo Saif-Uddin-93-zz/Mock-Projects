@@ -29,7 +29,7 @@ for f in onlyfiles:
     if f_bool:
         lof.append(f)
 
-print("\n.png list:\n",lof,"\n")
+print("\n.png list:\n", "\n".join(lof), "\n", sep="")
 
 run_cmd = lambda a: os.system(a)
 
@@ -51,7 +51,7 @@ for f in onlyfiles:
     if f_bool:
         lof2.append(f)
 
-print ("\nlist of converted files:\n", lof2, "\n")
+print ("\nlist of converted files:\n", "\n".join(lof2), "\n", sep="")
 
 def rename():
     for f in onlyfiles:
