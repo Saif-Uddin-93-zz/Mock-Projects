@@ -4,8 +4,9 @@ import os
 #import clipboard
 import pyperclip
 
-import compress_images
+#import compress_images
 #from compress_images import CompressImgs
+#compImg = CompressImgs()
 
 root = tk.Tk()
 
@@ -60,7 +61,7 @@ selectFolder.pack()
 compressButton = tk.Button(frame, text="COMPRESS TOOL!", padx=10,
                      pady=5, fg="white", bg="#263D42",
                      )#command=lambda:os.startfile(r"C:\Users\Saif Uddin\Desktop\compress_images_DESKTOP.py"))
-                     #command=lambda:compress_images.start())
+                     #command=lambda:compImg.start())
 compressButton.pack()
 
 root.mainloop()
