@@ -5,13 +5,6 @@ from os.path import isfile, join
 
 class CompressImgs:
     def __init__(self):
-        #pass
-        global path
-        global old_img_type
-        global new_img_type
-        global new_img_res
-        global keyword
-        ##path = path_v
         self.old_img_type = ".png" #ENTER OLD IMAGE TYPE! -----------------------------
         self.new_img_type = ".jpg" #ENTER NEW IMAGE TYPE! -----------------------------
         self.new_img_res = "1920:1080" #ENTER NEW RESOLUTION! -------------------------
@@ -47,7 +40,6 @@ class CompressImgs:
                 print("new name:",new_name)
 
     def start(self):
-        #lambda:os.startfile(r"C:\Users\Saif Uddin\Desktop\compress_images_DESKTOP.py")
         global onlyfiles
         global lof
         global lof2
