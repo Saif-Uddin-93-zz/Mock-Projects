@@ -5,22 +5,28 @@ from os.path import isfile, join
 
 class CompressImgs:
     def __init__(self):
-        pass
+        #pass
+        global path
+        global old_img_type
+        global new_img_type
+        global new_img_res
+        global keyword
+        ##path = path_v
+        self.old_img_type = ".png" #ENTER OLD IMAGE TYPE! -----------------------------
+        self.new_img_type = ".jpg" #ENTER NEW IMAGE TYPE! -----------------------------
+        self.new_img_res = "1920:1080" #ENTER NEW RESOLUTION! -------------------------
+        self.keyword = "copy of " #ENTER FILE OUTPUT PREFIX ---------------------------
+        self.run_cmd = lambda a: os.system(a)
 
-    old_img_type = ".png" #ENTER OLD IMAGE TYPE! -----------------------------
-    new_img_type = ".jpg" #ENTER NEW IMAGE TYPE! -----------------------------
-    new_img_res = "1920:1080" #ENTER NEW RESOLUTION! -------------------------
-    keyword = "copy of " #ENTER FILE OUTPUT PREFIX ---------------------------
-    run_cmd = lambda a: os.system(a)
-
-    def dir_path_(self):
-        dir = str(input("Press Enter to use current directory or input a directory path:\n"))
+    def dir_path_(self, path = ""):
+        #dir = str(input("Press Enter to use current directory or input a directory path:\n"))
+        global dir_path
+        dir_path = path
         if dir:
             print("INPUT: ")
-            return dir
         else:
             print("DEFAULT: ")
-            return os.path.dirname(os.path.abspath(__file__))
+            dir_path = os.path.dirname(os.path.abspath(__file__))
 
     def convert_images(self):
         #global lof
@@ -41,11 +47,11 @@ class CompressImgs:
                 print("new name:",new_name)
 
     def start(self):
-        global dir_path
+        #lambda:os.startfile(r"C:\Users\Saif Uddin\Desktop\compress_images_DESKTOP.py")
         global onlyfiles
         global lof
         global lof2
-        dir_path = self.dir_path_()
+        #dir_path = self.dir_path_()
         os.chdir(dir_path)
         print(dir_path)
 
@@ -62,5 +68,4 @@ class CompressImgs:
         self.rename()
         self.run_cmd(f"del *{self.old_img_type}")
         print("end")
-        self.run_cmd("pause")
-
+        #self.run_cmd("pause")

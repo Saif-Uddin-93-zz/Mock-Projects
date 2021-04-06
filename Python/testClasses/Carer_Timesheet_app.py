@@ -5,8 +5,8 @@ import os
 import pyperclip
 
 #import compress_images
-#from compress_images import CompressImgs
-#compImg = CompressImgs()
+from compress_images import CompressImgs
+compImg = CompressImgs()
 
 root = tk.Tk()
 
@@ -50,7 +50,9 @@ eveningLeaveButton = tk.Button(frame, text="Evening LEAVE", padx=10,
 eveningLeaveButton.pack()
 
 def SelectFolder():
+    global foldername
     foldername = filedialog.askdirectory(initialdir="C:\ContaCam\Front Door\Carers timesheet", title="Select Folder")
+    compImg.dir_path_(foldername)
     pyperclip.copy(foldername)
     #filedialog.askdirectory(title=title, initialdir=folder, parent=None if master is None else master.tk)
 selectFolder = tk.Button(frame, text="Select Folder", padx=10,
@@ -58,10 +60,13 @@ selectFolder = tk.Button(frame, text="Select Folder", padx=10,
                      command=SelectFolder)
 selectFolder.pack()
 
-compressButton = tk.Button(frame, text="COMPRESS TOOL!", padx=10,
+def start():
+    compImg.start()
+
+compressButton = tk.Button(frame, text="COMPRESS!", padx=10,
                      pady=5, fg="white", bg="#263D42",
-                     )#command=lambda:os.startfile(r"C:\Users\Saif Uddin\Desktop\compress_images_DESKTOP.py"))
-                     #command=lambda:compImg.start())
+                     #command=lambda:os.startfile(r"C:\Users\Saif Uddin\Desktop\compress_images_DESKTOP.py"))
+                     command = start)
 compressButton.pack()
 
 root.mainloop()
