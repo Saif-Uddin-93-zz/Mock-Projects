@@ -1,0 +1,118 @@
+import os
+import logging
+import datetime
+
+from os import listdir
+from os.path import isfile, join
+
+class CompressImgs:
+
+    def __init__(self):
+        self.old_img_type = ".png" #ENTER OLD IMAGE TYPE! -----------------------------
+        self.new_img_type = ".jpg" #ENTER NEW IMAGE TYPE! -----------------------------
+        self.new_img_res = "1920:1080" #ENTER NEW RESOLUTION! -------------------------
+        self.keyword = "copy of " #ENTER FILE OUTPUT PREFIX ---------------------------
+        self.run_cmd = lambda a: os.system(a)
+        #self.log_times = lambda:self.logger.info("test")
+        LOG_FORMAT = "%(message)s,"
+        logging.basicConfig(filename=r"C:\ContaCam\Front Door\Carers timesheet\times.csv",
+                            level = logging.DEBUG,
+                            format=LOG_FORMAT)
+        self.logger = logging.getLogger()
+        self.getToday = datetime.datetime.now()
+        YEAR = self.getToday.strftime("%Y")
+        MONTH_int = self.getToday.strftime("%m")
+        MONTH_str = self.getToday.strftime("%B")
+        DAY_int = self.getToday.strftime("%d") 
+        DAY_str = self.getToday.strftime("%a")
+        self.root_path = f"C:\ContaCam\Front Door\Carers timesheet\{YEAR}\{MONTH_int} {MONTH_str}\\"
+        self.directory = f"{DAY_int} {DAY_str}"
+
+    def start(self):
+        global onlyfiles
+        global lof
+        global lof2
+        self.dir_path_()
+        os.chdir(self.dir_path)
+
+        onlyfiles = [f for f in listdir(self.dir_path) if isfile(join(self.dir_path, f))]
+        lof = [f for f in onlyfiles if self.old_img_type in f]
+        print("\n.png list:\n", "\n".join(lof), "\n", sep="")
+
+        self.convert_images()        
+
+        onlyfiles = [f for f in listdir(self.dir_path) if isfile(join(self.dir_path, f))]
+        lof2 = [f for f in onlyfiles if self.keyword in f]
+        print ("\nlist of converted files:\n", "\n".join(lof2), "\n", sep="")
+
+        self.rename()
+        self.run_cmd(f"del *{self.old_img_type}")
+        print("end")
+        #self.run_cmd("pause")    
+
+    def dir_path_(self, vPath=""):
+        #dir = str(input("Press Enter to use current directory or input a directory path:\n"))
+        self.run_cmd("cls")
+        if not vPath:
+            print("Today's folder: ", self.dir_path, sep="\n")
+            #dir_path = os.path.dirname(os.path.abspath(__file__))
+        else:
+            self.dir_path = vPath
+            print("MANUAL INPUT: ", self.dir_path, sep="\n")
+
+    def convert_images(self):
+        for f in lof:
+            file_input = str(f)
+            file_output = self.keyword + file_input[:-4] + self.new_img_type
+            command = f'ffmpeg -i "{file_input}" -vf scale={self.new_img_res} -compression_level 100 "{file_output}"'
+            self.run_cmd(command)
+            self.logs()
+
+    def logs(self):
+        #%Y 2021, %m 01-12, %B January-December, %d 01-31, %a Mon - Sun
+        #today = self.getToday.strftime("%Y, %m, %B, %d, %a")
+        self.logger.info(self.getToday)
+
+    def rename(self):
+        for f in onlyfiles:
+            print("old name:",f)
+            if "copy of " in f:
+                new_name = f[8:]
+                command = f'rename "{self.dir_path}\{f}" "{new_name}"'
+                self.run_cmd(command)
+                print("new name:",new_name)
+
+    def newFolder(self):        
+        try:
+            self.dir_path = os.path.join(self.root_path, self.directory)
+            os.mkdir(self.dir_path)
+            self.dir_path_()
+        except FileExistsError:
+            print("Today's folder already created.")
+
+    def deleteExcess(self, path):
+        if path == None:
+            print(path)
+        elif path != None:
+            self.dir_path = path
+            os.chdir(self.dir_path)
+            getFiles = [f for f in listdir(self.dir_path) if isfile(join(self.dir_path, f))]
+            mp4Files = [f for f in getFiles if ".mp4" in f]
+            otherFiles = list(set(getFiles) - set(mp4Files))
+            for f in otherFiles:
+                self.run_cmd(f"del {f}")
+            for f in range(len(mp4Files)):
+                if "shot" in mp4Files[f]:
+                    self.run_cmd(f"del {mp4Files[f]}")
+                new_name = mp4Files[f].strip("rec_")
+                command = f'rename "{self.dir_path}\{mp4Files[f]}" "{new_name}"'
+                self.run_cmd(command)
+                mp4Files[f] = new_name
+            
+            morningList = [f for f in mp4Files if f[11:13]=="08" or f[11:13]=="09"]
+            afternoonList = [f for f in mp4Files if f[11:13]=="12" or f[11:13]=="13"]
+            eveningList = [f for f in mp4Files if f[11:13]=="18" or f[11:13]=="19"]
+            keepList = morningList + afternoonList + eveningList
+            delList = list(set(mp4Files) - set(keepList))
+            for f in delList:
+                self.run_cmd(f"del {f}")
