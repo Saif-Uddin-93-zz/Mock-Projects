@@ -105,15 +105,13 @@ class CompressImgs:
                 if "shot" in mp4Files[f]:
                     self.run_cmd(f"del {mp4Files[f]}")
                 new_name = mp4Files[f].strip("rec_")
-                new_name = new_name[11:]
-                #new_name = new_name[0:2]+new_name[3:5]+new_name[6:] #removing underscores
                 command = f'rename "{self.dir_path}\{mp4Files[f]}" "{new_name}"'
                 self.run_cmd(command)
                 mp4Files[f] = new_name
             
-            morningList = [f for f in mp4Files if (f[0:2]=="08" and int(f[3:5])>55) or f[0:2]=="09"]
-            afternoonList = [f for f in mp4Files if (f[0:2]=="12" and int(f[3:5])>25) or (f[0:2]=="13" and int(f[3:5])<35)]
-            eveningList = [f for f in mp4Files if (f[0:2]=="18" and int(f[3:5])>25) or (f[0:2]=="19" and int(f[3:5])<35)]
+            morningList = [f for f in mp4Files if f[11:13]=="08" or f[11:13]=="09"]
+            afternoonList = [f for f in mp4Files if f[11:13]=="12" or f[11:13]=="13"]
+            eveningList = [f for f in mp4Files if f[11:13]=="18" or f[11:13]=="19"]
             keepList = morningList + afternoonList + eveningList
             delList = list(set(mp4Files) - set(keepList))
             for f in delList:
