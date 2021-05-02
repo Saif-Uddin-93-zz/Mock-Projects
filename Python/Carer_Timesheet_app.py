@@ -51,14 +51,18 @@ eveningLeaveButton.pack()
 
 def SelectFolder():
     global foldername
-    foldername = filedialog.askdirectory(initialdir="test", title="Select Folder")
-    compImg.dir_path_(foldername)
+    foldername = filedialog.askdirectory(initialdir="use cached folder", title="Select Folder")
+    try: 
+        compImg.dir_path_(foldername)
+    except AttributeError: 
+        print("Folder select was cancelled")
     pyperclip.copy(foldername)
     #filedialog.askdirectory(title=title, initialdir=folder, parent=None if master is None else master.tk)
 selectFolder = tk.Button(frame, text="Select Folder", padx=10,
                      pady=5, fg="white", bg="#263D42",
                      command=SelectFolder)
 selectFolder.pack()
+
 
 compressButton = tk.Button(frame, text="COMPRESS!", padx=10,
                      pady=5, fg="white", bg="#263D42",
@@ -68,7 +72,7 @@ compressButton.pack()
 
 newDayButton = tk.Button(frame, text="NEW DAY!", padx=10,
                      pady=5, fg="white", bg="#263D42",                     
-                     command = lambda:compImg.newFolder())
+                     command = lambda:compImg.newFolder(compImg.root_path, 1))
 newDayButton.pack()
 
 def DeleteExcess():
