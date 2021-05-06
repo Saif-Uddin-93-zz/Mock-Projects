@@ -20,14 +20,14 @@ class CompressImgs:
                             format=LOG_FORMAT)
         self.logger = logging.getLogger()
         self.getToday = datetime.datetime.now()
-        self.YEAR = self.getToday.strftime("%Y")
-        self.MONTH_int = self.getToday.strftime("%m")
-        self.MONTH_str = self.getToday.strftime("%B")
-        self.DAY_int = self.getToday.strftime("%d") 
-        self.DAY_str = self.getToday.strftime("%a")
-        self.root_path = f"C:\ContaCam\Front Door\Carers timesheet\{self.YEAR}\{self.MONTH_int} {self.MONTH_str}\\"
-        self.directory = f"{self.DAY_int} {self.DAY_str}"
-        self.dList = ["ContaCam", "Front Door", "Carers timesheet", self.YEAR, self.MONTH_int+" "+self.MONTH_str]
+        YEAR = self.getToday.strftime("%Y")
+        MONTH_int = self.getToday.strftime("%m")
+        MONTH_str = self.getToday.strftime("%B")
+        DAY_int = self.getToday.strftime("%d") 
+        DAY_str = self.getToday.strftime("%a")
+        self.root_path = f"C:\ContaCam\Front Door\Carers timesheet\{YEAR}\{MONTH_int} {MONTH_str}\\"
+        self.directory = f"{DAY_int} {DAY_str}"
+        self.dList = ["ContaCam", "Front Door", "Carers timesheet", YEAR, MONTH_int+" "+MONTH_str]
 
     def start(self):
         global onlyfiles
@@ -53,7 +53,7 @@ class CompressImgs:
 
     def dir_path_(self, vPath=""):
         #dir = str(input("Press Enter to use current directory or input a directory path:\n"))
-        #self.run_cmd("cls")
+        self.run_cmd("cls")
         if not vPath:
             print("Today's folder: ", self.dir_path, sep="\n")
             #dir_path = os.path.dirname(os.path.abspath(__file__))
@@ -66,23 +66,13 @@ class CompressImgs:
             file_input = str(f)
             file_output = self.keyword + file_input[:-4] + self.new_img_type
             command = f'ffmpeg -i "{file_input}" -vf scale={self.new_img_res} -compression_level 100 "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -c:v libx265 -qp 16 "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -c:v libx265 -preset slow -crf 19 -c:a libx265 -b:a 128k "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -c:a copy -c:v vp9 -b:v 100K "{file_output}"' #libvo_aacenc
-            #command = f'ffmpeg -i "{file_input}" -c:v copy -c:a copy -y "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -c:v libx265 -c:a hevc_nvenc -crf 28 -preset medium "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -vcodec libx265 -crf 8 -preset veryslow -c:a aac -strict experimental -b:a 192k -ac 2 "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -c:v libx265 -crf 0 -preset veryslow -c:a libfdk_aac -b:a 192k -ac 2 "{file_output}"'
-            #command = f'ffmpeg -i "{file_input}" -c:v libx265 -crf 0 -preset veryslow -c:a aac -strict experimental -b:a 192k -ac 2 "{file_output}"'
-            #command = f'ffmpeg -fflags +genpts -i "{file_input}" -allow_raw_vfw 1 -c:v copy -c:a copy "{file_output}"'
             self.run_cmd(command)
             #self.logs()
 
-    def logs(self, timeTEXT = ""):
+    def logs(self):
         #%Y 2021, %m 01-12, %B January-December, %d 01-31, %a Mon - Sun
         #today = self.getToday.strftime("%Y, %m, %B, %d, %a")
-        self.logger.info(timeTEXT)
-        print("logged")
+        self.logger.info(self.getToday)
 
     def rename(self):
         for f in onlyfiles:
@@ -105,9 +95,9 @@ class CompressImgs:
         else:
             if i>1:
                 #print(d, "TRUE and i>0. i ==", i)
-                i -= 1
-                self.dir_path = os.path.join(d, str(self.dList[-i])+"\\")
+                self.dir_path = os.path.join(d, str(self.dList[-(i-1)])+"\\")
                 os.mkdir(self.dir_path)
+                i -= 1                
                 self.newFolder(self.dir_path, i)
             else:
                 #print("TRUE and i==0. i ==", i)
@@ -115,7 +105,6 @@ class CompressImgs:
                     self.dir_path = os.path.join(self.root_path, self.directory)
                     os.mkdir(self.dir_path)
                     self.dir_path_()
-                    self.logs(f"{self.YEAR} {self.MONTH_int} {self.MONTH_str} {self.directory}")
                 except FileExistsError:
                     print("Today's folder already created.")
 

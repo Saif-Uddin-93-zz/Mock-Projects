@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter import filedialog, Text
 import os
 #import clipboard
@@ -10,9 +9,9 @@ from compress_images import CompressImgs
 compImg = CompressImgs()
 
 root = tk.Tk()
-root.title("Carer Timesheet app")
 
-canvas = tk.Canvas(root, height=500, width=400, bg="#263D42")
+
+canvas = tk.Canvas(root, height=450, width=400, bg="#263D42")
 canvas.pack()
 
 frame = tk.Frame(root, bg="white")
@@ -72,7 +71,7 @@ compressButton = tk.Button(frame, text="COMPRESS!", padx=10,
 compressButton.pack()
 
 newDayButton = tk.Button(frame, text="NEW DAY!", padx=10,
-                     pady=5, fg="white", bg="#263D42",
+                     pady=5, fg="white", bg="#263D42",                     
                      command = lambda:compImg.newFolder(compImg.root_path, 1))
 newDayButton.pack()
 
@@ -86,20 +85,5 @@ deleteExcess = tk.Button(frame, text="Delete Excess Files", padx=10,
                      pady=5, fg="white", bg="#263D42",                     
                      command=DeleteExcess)
 deleteExcess.pack()
-
-#def TimeEntry():
-
-timeEntryLABEL = tk.Label(frame, text="Enter Time: ")
-timeEntryLABEL.pack()#side = tk.LEFT)
-entryTEXT = tk.StringVar()
-timeEntry = ttk.Entry(frame,text="Select Folder", 
-                     #bd=1, fg="black", bg="white", exportselection=0,
-                     textvariable = entryTEXT)
-                     #state=tk.DISABLED)
-timeEntry.pack()#side = tk.RIGHT)
-entryButton = tk.Button(frame, text="Confirm", padx=10,
-                     pady=5, fg="white", bg="#263D42",                     
-                     command = lambda:compImg.logs(f"{pyperclip.paste()} {entryTEXT.get()}"))
-entryButton.pack()
 
 root.mainloop()
