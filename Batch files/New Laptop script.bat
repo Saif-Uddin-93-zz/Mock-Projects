@@ -7,7 +7,7 @@ start /b outlook.exe
 
 start /b /d "C:\Users\%username%\AppData\Local\Microsoft\Teams" Update.exe --processStart "Teams.exe"
 
-start /b chrome https://shiseido-emea.app.box.com/ https://shiseido.service-now.com/ https://app.matrixbooking.com/
+start /b chrome https://Example.Website1.com/ https://Example.Website2.com/ https://Example.Website3.com/
 
 gpupdate /force
 
